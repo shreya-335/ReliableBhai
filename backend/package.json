@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
@@ -14,14 +17,19 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@neondatabase/serverless": "~1.0.2",
+    "@prisma/adapter-neon": "~7.3.0",
     "@prisma/client": "~7.3.0",
+    "@types/ws": "~8.18.1",
     "axios": "~1.13.4",
     "express": "~5.2.1",
-    "prisma": "~7.3.0"
+    "prisma": "~7.3.0",
+    "ws": "~8.19.0"
   },
   "devDependencies": {
     "@types/express": "~5.0.6",
     "@types/node": "~25.1.0",
+    "ts-node": "~10.9.2",
     "ts-node-dev": "~2.0.0",
     "typescript": "~5.9.3"
   }
