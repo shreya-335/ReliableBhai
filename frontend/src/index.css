@@ -2,6 +2,103 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --background: 40 33% 96%; /* #f9f6f1 */
+    --ink: 240 10% 10%;
+
+    /* Custom Theme Colors */
+    --cyber-amber: #fef3c7;
+    --cyber-rose: #fce7f3;
+    --cyber-azure: #dbeafe;
+  }
+}
+
 body {
-  @apply bg-background;
+  background-color: #f9f6f1;
+  @apply text-zinc-900 antialiased;
+}
+
+/* Metric Cards */
+.metric-card {
+  @apply rounded-[32px] p-6 shadow-sm border border-black/5 transition-transform hover:scale-[1.02];
+}
+
+/* ========================= */
+/* React Day Picker Styling  */
+/* ========================= */
+
+.rdp {
+  --rdp-cell-size: 28px; /* 👈 CRITICAL: keeps calendar inside sidebar */
+  --rdp-accent-color: #fb7185;
+  --rdp-background-color: #fff1f2;
+
+  font-size: 10px;
+  margin: 0 auto;
+}
+
+.rdp-months {
+  width: 100%;
+  justify-content: center;
+}
+
+.rdp-month {
+  width: 100%;
+}
+
+.rdp-caption {
+  padding: 0.25rem 0;
+  justify-content: center;
+}
+
+.rdp-caption_label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rdp-nav {
+  gap: 4px;
+}
+
+.rdp-nav_button {
+  width: 24px;
+  height: 24px;
+}
+
+.rdp-head_cell {
+  font-size: 9px;
+  font-weight: 700;
+  color: #a1a1aa;
+  padding: 0;
+}
+
+.rdp-cell {
+  padding: 0;
+}
+
+.rdp-day {
+  border-radius: 6px;
+}
+
+.rdp-selected {
+  background-color: #ffe4e6;
+  color: #e11d48;
+  font-weight: 800;
+}
+
+.rdp-today {
+  border: 1px solid #d4d4d8;
+}
+
+/* Force 7-day calendar to fit sidebar */
+.rdp-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.rdp-head_cell,
+.rdp-cell {
+  width: calc(100% / 7);
 }

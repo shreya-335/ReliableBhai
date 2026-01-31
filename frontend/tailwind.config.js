@@ -4,12 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#F9FAFB', // Soft light gray
+        background: '#FAF6F1', // Soft cream background
         panel: '#FFFFFF',
-        ink: '#111827', // Deep charcoal
-        muted: '#6B7280',
-        accent: '#141414',
+        ink: '#1A1D21',
+        cyberAmber: '#F4D371', // Migration Health yellow
+        cyberRose: '#F8B4C9',  // Agent Impact pink
+        cyberAzure: '#C4D9F2', // Resolution Rate blue
       },
+      borderRadius: {
+        '3xl': '24px',
+      }
     },
   },
   plugins: [],
