@@ -1,0 +1,55 @@
+{
+  "version": "v2_headless",
+  "last_updated": "2026-01-31",
+  "architecture": "headless",
+
+  "endpoints": {
+    "/api/v2/init-session": {
+      "method": "POST",
+      "description": "Initializes a checkout session and returns a session token required for headless checkout.",
+      "required_for": ["headless_checkout"],
+      "returns": ["session_token"],
+      "common_errors": [],
+      "notes": "Must be called before /api/v2/checkout in headless flows."
+    },
+
+    "/api/v2/checkout": {
+      "method": "POST",
+      "description": "Initiates a headless checkout using a previously created session token.",
+      "required_headers": ["X-Session-Token"],
+      "common_errors": [
+        "PAYMENT_SESSION_MISSING",
+        "INVALID_CURRENCY_CODE"
+      ],
+      "migration_note": "Replaces /v1/hosted-checkout. Direct usage of hosted payloads will fail."
+    }
+  },
+
+  "webhooks": {
+    "order.created": {
+      "description": "Emitted when an order is successfully created.",
+      "signature_version": "v2",
+      "common_errors": [
+        "WEBHOOK_SIGNATURE_MISMATCH",
+        "ENDPOINT_TIMEOUT"
+      ],
+      "notes": "Webhook signatures differ from V1. Merchants must rotate secrets after migration."
+    }
+  },
+
+  "migration_notes": {
+    "hosted_to_headless": {
+      "summary": "Headless architecture removes hosted checkout and requires explicit session handling.",
+      "breaking_changes": [
+        "Hosted checkout endpoints removed",
+        "Session tokens required for checkout",
+        "Webhook signatures updated to V2 format"
+      ],
+      "common_mistakes": [
+        "Calling /api/v2/checkout without initializing session",
+        "Using V1 webhook secrets",
+        "Calling deprecated /v1 endpoints"
+      ]
+    }
+  }
+}
