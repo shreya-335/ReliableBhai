@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Event {
+  id               String   @id @default(uuid())
+  eventId          String
+  eventType        String
+  merchantId       String
+  source           String
+  occurredAt       DateTime
+  context          Json
+  technicalDetails Json
+  createdAt        DateTime @default(now())
+
+  @@index([eventType])
+  @@index([merchantId])
+  @@index([occurredAt])
+  @@index([eventType, occurredAt])
+}
+
+model MigrationState {
+  merchantId   String   @id
+  currentStage String
+  updatedAt    DateTime
+}
+
+model AgentTrigger {
+  id                String   @id @default(uuid())
+  triggerType       String
+  detectedAt        DateTime
+  timeWindowMinutes Int
+  eventIds          Json
+  payloadSnapshot   Json
+  agentResponse     Json?
+  status            String
+  createdAt         DateTime @default(now())
+
+  @@index([detectedAt])
+  @@index([status])
+}
+
+model KnowledgeBase {
+  errorCode    String @id
+  severity     String
+  symptom      String
+  rootCause    String
+  resolution   String
+  relatedStage String
+  metadata     Json?
+}
