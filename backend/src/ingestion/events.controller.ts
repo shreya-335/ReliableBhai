@@ -2,6 +2,7 @@
 
 import type { Request, Response } from "express";
 import { Router } from "express";
+
 import {
   normalizeSupportTicket,
   normalizeCheckoutFailed,
@@ -12,13 +13,14 @@ import {
 
 import { eventRepository } from "../store/event.repository.js";
 import { migrationRepository } from "../store/migration.repository.js";
+import { triggerEngine } from "../correlation/trigger.engine.js";
 
 // Router instance
 const router = Router();
 
 /**
  * Helper to handle ingestion flow:
- * normalize -> persist -> respond
+ * normalize -> persist -> (fire correlation) -> respond
  */
 async function ingestEvent(
   req: Request,
@@ -31,10 +33,11 @@ async function ingestEvent(
   try {
     const normalizedEvent = normalizeFn(req.body);
 
-    // Persist event
+    // 1️⃣ Persist event
+    console.log("NORMALIZED EVENT:", normalizedEvent);
     await eventRepository.insertEvent(normalizedEvent);
 
-    // Optional side effect: update migration_state
+    // 2️⃣ Optional side effect: update migration_state
     if (options?.updateMigrationState) {
       await migrationRepository.upsertMigrationStage({
         merchantId: normalizedEvent.merchantId,
@@ -43,6 +46,12 @@ async function ingestEvent(
       });
     }
 
+    // 3️⃣ Fire correlation engine (NON-BLOCKING)
+    triggerEngine.evaluate().catch((err) => {
+      console.error("Trigger engine evaluation failed:", err);
+    });
+
+    // 4️⃣ Respond immediately
     return res.status(202).json({
       status: "accepted",
       event_type: normalizedEvent.eventType,
