@@ -1,22 +1,25 @@
+// src/components/Header.jsx
 import React from 'react';
 import { Activity, Zap, CheckCircle, AlertTriangle } from 'lucide-react';
 
-const Header = ({ health }) => {
+const Header = ({ health, onAgentImpactClick }) => {
   return (
     <div className="mb-8 space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Migration Health - Yellow Theme */}
         <div className="metric-card" style={{ backgroundColor: '#FDF2B3' }}>
           <div className="flex justify-between items-start mb-4">
             <span className="text-[10px] font-bold uppercase tracking-widest text-amber-900/60">Migration Health</span>
             <Activity size={18} className="text-amber-900/40" />
           </div>
           <div className="text-3xl font-bold text-amber-900 mb-1 tracking-tighter capitalize">{health.migration_health}</div>
-          <p className="text-[10px] font-bold text-amber-900/50 uppercase">Last check: 2m ago</p>
         </div>
 
-        {/* Agent Impact - Pink Theme */}
-        <div className="metric-card" style={{ backgroundColor: '#FCE7F3' }}>
+        {/* Clickable Agent Impact Tile */}
+        <div 
+          className="metric-card cursor-pointer hover:brightness-95 transition-all" 
+          style={{ backgroundColor: '#FCE7F3' }}
+          onClick={onAgentImpactClick}
+        >
           <div className="flex justify-between items-start mb-4">
             <span className="text-[10px] font-bold uppercase tracking-widest text-rose-900/60">Agent Impact</span>
             <Zap size={18} className="text-rose-900/40" />
@@ -30,26 +33,13 @@ const Header = ({ health }) => {
           </div>
         </div>
 
-        {/* Resolution Rate - Blue Theme */}
         <div className="metric-card" style={{ backgroundColor: '#DBEAFE' }}>
           <div className="flex justify-between items-start mb-4">
             <span className="text-[10px] font-bold uppercase tracking-widest text-blue-900/60">Resolution Rate</span>
             <CheckCircle size={18} className="text-blue-900/40" />
           </div>
           <div className="text-4xl font-bold text-blue-900 tracking-tighter mb-2">{health.auto_resolve_rate}</div>
-          <span className="text-[9px] font-black bg-white/50 text-blue-900 px-3 py-1 rounded-full uppercase tracking-widest">+12% from last week</span>
         </div>
-      </div>
-
-      {/* Warning Banner - Dark Command Style */}
-      <div className="bg-[#18181b] text-white p-4 rounded-2xl flex justify-between items-center shadow-lg">
-        <div className="flex items-center gap-3">
-          <AlertTriangle size={18} className="text-amber-400" />
-          <span className="text-xs font-medium tracking-tight">
-            Detected {health.active_clusters.length} similar ticket patterns related to <span className="text-amber-200 underline underline-offset-4 font-bold">'{health.active_clusters[0]}'</span>
-          </span>
-        </div>
-        <button className="bg-white/10 hover:bg-white/20 px-5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all">View Cluster</button>
       </div>
     </div>
   );
