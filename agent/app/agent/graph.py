@@ -14,7 +14,7 @@ from app.schemas.output import AgentOutput # Your Pydantic Model
 
 # The "Investigator" Model (Has access to tools)
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-pro",
+    model="gemini-2.5-flash",
     temperature=0,
     max_tokens=None,
     timeout=None,
@@ -23,7 +23,7 @@ llm = ChatGoogleGenerativeAI(
 
 # The "Formatter" Model (Strict JSON enforcer)
 # We use a separate instance to ensure clean formatting logic
-formatter_llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0)
+formatter_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0)
 
 # Bind tools to the investigator
 llm_with_tools = llm.bind_tools(ALL_TOOLS)
@@ -88,9 +88,9 @@ def formatter_node(state: AgentState):
     chain = formatting_prompt | structured_llm
     
     final_json = chain.invoke(messages)
-    
+    print("[DEBUG] final_json from formatteR_node: ", final_json)
     # Save to state
-    return {"final_output": final_json.dict()}
+    return {"final_output": final_json.model_dump()}
 
 # --- 4. DEFINE THE EDGES ---
 
@@ -135,3 +135,17 @@ workflow.add_edge("formatter", END)
 
 # Compile
 app = workflow.compile()
+
+# Add this to the bottom of app/agent/graph.py
+
+if __name__ == "__main__":
+    # This block only runs when you execute 'python -m app.agent.graph'
+    try:
+        # Generate the diagram as a PNG
+        graph_image = app.get_graph().draw_mermaid_png()
+        
+        with open("agent_diagram.png", "wb") as f:
+            f.write(graph_image)
+        print("✅ Diagram saved successfully as 'agent_diagram.png'")
+    except Exception as e:
+        print(f"❌ Could not save diagram. Ensure 'langgraph' and 'graphviz' are installed. Error: {e}")

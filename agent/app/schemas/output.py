@@ -1,17 +1,21 @@
-from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
+from pydantic import BaseModel, Field
+from typing import List, Dict, Any
 
 class AgentReasoning(BaseModel):
-    trace: List[str]
-    root_cause: str
-    confidence_score: float
+    trace: List[str] = Field(description="Step-by-step reasoning logs")
+    root_cause: str = Field(description="The identified technical root cause")
+    confidence_score: float = Field(description="Confidence (0-1) in the diagnosis")
 
 class ActionPlan(BaseModel):
-    type: str  # e.g., "send_email", "escalate_slack"
-    risk_level: str # "LOW", "MEDIUM", "HIGH"
-    risk_reason: str
-    content: Dict[str, str] # {"subject": "...", "body": "..."}
-    tools_required: List[str]
+    type: str = Field(description="Action type: send_email, escalate_slack, etc.")
+    risk_level: str = Field(description="LOW, MEDIUM, or HIGH")
+    risk_reason: str = Field(description="Why this risk level was assigned")
+    
+    # --- ADDED FIELD ---
+    confidence_score: float = Field(description="Confidence (0-1) that this action is the correct fix")
+    
+    content: Dict[str, str] = Field(description="The content of the email or ticket")
+    tools_required: List[str] = Field(description="List of external tools needed to execute this")
 
 class AgentOutput(BaseModel):
     ticket_id: str
