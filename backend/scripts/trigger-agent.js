@@ -28,9 +28,9 @@ async function sendEvent(merchantId, eventId) {
 async function main() {
   console.log("🚀 Triggering multi-merchant checkout failure…");
 
-  await sendEvent("_merchantdemo07", "_evtdemo07");
-  await sendEvent("_merchantdemo08", "_evtdemo08");
-  await sendEvent("_merchantdemo09", "_evtdemo09");
+  await sendEvent("_merchantdemo120", "_evtdemo120");
+//   await sendEvent("_merchantdemo08", "_evtdemo08");
+//   await sendEvent("_merchantdemo09", "_evtdemo09");
 
   console.log("🎯 Done. Agent trigger should now exist.");
 }

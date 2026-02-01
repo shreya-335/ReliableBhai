@@ -5,8 +5,8 @@ import { triggerRepository } from "../store/trigger.repository.js";
 import { migrationRepository } from "../store/migration.repository.js";
 import { agentClient } from "../agent_client/agent.client.js";
 
-const CORRELATION_WINDOW_MINUTES = 2;
-const MULTI_MERCHANT_THRESHOLD = 3;
+const CORRELATION_WINDOW_MINUTES = 1;
+const MULTI_MERCHANT_THRESHOLD = 1;
 
 export class TriggerEngine {
   /**
